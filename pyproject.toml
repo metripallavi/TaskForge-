@@ -1,15 +1,13 @@
-[project]
-name = "taskforge"
-version = "0.1.0"
-description = "Cloud-native job processing platform"
-requires-python = ">=3.11"
-
 [tool.black]
 line-length = 88
 target-version = ["py311"]
 
+# =========================
+# Ruff
+# =========================
 [tool.ruff]
 line-length = 88
+exclude = ["alembic"]
 
 [tool.ruff.lint]
 select = [
@@ -24,11 +22,16 @@ select = [
 ignore = [
     "B008",
 ]
+
+# =========================
+# MyPy
+# =========================
 [tool.mypy]
 python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+exclude = "alembic/"
 
 [[tool.mypy.overrides]]
 module = [
@@ -36,6 +39,9 @@ module = [
 ]
 ignore_errors = true
 
+# =========================
+# Pytest
+# =========================
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]

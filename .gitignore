@@ -1,67 +1,83 @@
+# =========================
 # Python
-
+# =========================
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 
+# =========================
 # Virtual Environment
-
+# =========================
 .venv/
 venv/
+ENV/
 
-# Pytest
+# =========================
+# Environment variables
+# =========================
+.env
+.env.*
+!.env.example
 
+# =========================
+# Database files (IMPORTANT)
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================
+# Alembic
+# =========================
+alembic.ini
+alembic/versions/__pycache__/
+
+# =========================
+# Testing
+# =========================
 .pytest_cache/
-
-# Coverage
-
 .coverage
 htmlcov/
 
-# Ruff
-
+# =========================
+# Linting / Type checking
+# =========================
 .ruff_cache/
-
-# Mypy
-
 .mypy_cache/
 
-# IDE
-
+# =========================
+# IDEs
+# =========================
 .vscode/
 .idea/
 
-# OS
-
+# =========================
+# OS files
+# =========================
 .DS_Store
 Thumbs.db
 
-# Environment
-
-.env
-.env.*
-
+# =========================
 # Logs
-
+# =========================
 *.log
 
-# Build
-
+# =========================
+# Build / packaging
+# =========================
 dist/
 build/
 *.egg-info/
 
-# Terraform
-
+# =========================
+# Terraform (if used later)
+# =========================
 *.tfstate
 *.tfstate.*
 .terraform/
 
-# Kubernetes
-
+# =========================
+# Kubernetes (optional)
+# =========================
 kubeconfig
-
-# Alembic
-
-alembic.ini
