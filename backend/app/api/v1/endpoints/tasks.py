@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
 from app.application.schemas.task import (
     TaskCreate,
@@ -6,14 +7,12 @@ from app.application.schemas.task import (
     TaskUpdate,
 )
 from app.application.services.task_service import TaskService
-from app.infrastructure.repositories.in_memory_task_repository import (
-    InMemoryTaskRepository,
+from app.infrastructure.database.database import get_db
+from app.infrastructure.repositories.sqlalchemy_task_repository import (
+    SQLAlchemyTaskRepository,
 )
 
 router = APIRouter()
-
-repository = InMemoryTaskRepository()
-service = TaskService(repository)
 
 
 @router.post(
@@ -21,7 +20,13 @@ service = TaskService(repository)
     response_model=TaskResponse,
     status_code=201,
 )
-def create_task(payload: TaskCreate) -> TaskResponse:
+def create_task(
+    payload: TaskCreate,
+    db: Session = Depends(get_db),
+) -> TaskResponse:
+    repository = SQLAlchemyTaskRepository(db)
+    service = TaskService(repository)
+
     task = service.create_task(payload)
 
     return TaskResponse(
@@ -34,7 +39,12 @@ def create_task(payload: TaskCreate) -> TaskResponse:
 
 
 @router.get("/", response_model=list[TaskResponse])
-def list_tasks() -> list[TaskResponse]:
+def list_tasks(
+    db: Session = Depends(get_db),
+) -> list[TaskResponse]:
+    repository = SQLAlchemyTaskRepository(db)
+    service = TaskService(repository)
+
     tasks = service.list_tasks()
 
     return [
@@ -50,7 +60,13 @@ def list_tasks() -> list[TaskResponse]:
 
 
 @router.get("/{task_id}", response_model=TaskResponse)
-def get_task(task_id: str) -> TaskResponse:
+def get_task(
+    task_id: str,
+    db: Session = Depends(get_db),
+) -> TaskResponse:
+    repository = SQLAlchemyTaskRepository(db)
+    service = TaskService(repository)
+
     task = service.get_task(task_id)
 
     if task is None:
@@ -69,7 +85,11 @@ def get_task(task_id: str) -> TaskResponse:
 def update_task(
     task_id: str,
     payload: TaskUpdate,
+    db: Session = Depends(get_db),
 ) -> TaskResponse:
+    repository = SQLAlchemyTaskRepository(db)
+    service = TaskService(repository)
+
     task = service.update_task(task_id, payload)
 
     if task is None:
@@ -85,7 +105,13 @@ def update_task(
 
 
 @router.delete("/{task_id}")
-def delete_task(task_id: str) -> dict[str, str]:
+def delete_task(
+    task_id: str,
+    db: Session = Depends(get_db),
+) -> dict[str, str]:
+    repository = SQLAlchemyTaskRepository(db)
+    service = TaskService(repository)
+
     service.delete_task(task_id)
 
     return {"message": "Task deleted"}

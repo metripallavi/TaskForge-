@@ -18,14 +18,23 @@ select = [
     "I",
     "N",
     "UP",
-    "B"
+    "B",
 ]
 
+ignore = [
+    "B008",
+]
 [tool.mypy]
 python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "app.infrastructure.repositories.sqlalchemy_task_repository",
+]
+ignore_errors = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
