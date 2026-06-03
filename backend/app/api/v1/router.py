@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.api.v1.endpoints.health import router as health_router
-from app.api.v1.endpoints.tasks import router as tasks_router
+from backend.app.api.v1.endpoints.health import router as health_router
+from backend.app.api.v1.endpoints.tasks import router as tasks_router
 
 router = APIRouter()
 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.domain.entities.task import Task
+from backend.app.domain.entities.task import Task
 
 
 class TaskRepository(ABC):

@@ -2,9 +2,9 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from app.domain.entities.task import Task
-from app.domain.repositories.task_repository import TaskRepository
-from app.infrastructure.database.models import TaskModel
+from backend.app.domain.entities.task import Task
+from backend.app.domain.repositories.task_repository import TaskRepository
+from backend.app.infrastructure.database.models import TaskModel
 
 
 class SQLAlchemyTaskRepository(TaskRepository):

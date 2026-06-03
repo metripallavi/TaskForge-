@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Boolean, Column, DateTime, String
 
-from app.infrastructure.database.database import Base
+from backend.app.infrastructure.database.database import Base
 
 
 class TaskModel(Base):

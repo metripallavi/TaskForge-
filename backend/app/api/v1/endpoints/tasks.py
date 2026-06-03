@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.application.schemas.task import (
+from backend.app.application.schemas.task import (
     TaskCreate,
     TaskResponse,
     TaskUpdate,
 )
-from app.application.services.task_service import TaskService
-from app.infrastructure.database.database import get_db
-from app.infrastructure.repositories.sqlalchemy_task_repository import (
+from backend.app.application.services.task_service import TaskService
+from backend.app.infrastructure.database.database import get_db
+from backend.app.infrastructure.repositories.sqlalchemy_task_repository import (
     SQLAlchemyTaskRepository,
 )
 

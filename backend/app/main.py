@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from app.api.router import api_router
-from app.core.settings import settings
-from app.infrastructure.database.database import Base, engine
+from backend.app.api.router import api_router
+from backend.app.core.settings import settings
+from backend.app.infrastructure.database.database import Base, engine
 
 # Create database tables
 Base.metadata.create_all(bind=engine)

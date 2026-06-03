@@ -1,5 +1,5 @@
-from app.domain.entities.task import Task
-from app.domain.repositories.task_repository import TaskRepository
+from backend.app.domain.entities.task import Task
+from backend.app.domain.repositories.task_repository import TaskRepository
 
 
 class InMemoryTaskRepository(TaskRepository):

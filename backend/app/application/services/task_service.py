@@ -1,12 +1,12 @@
 from datetime import datetime
 from uuid import uuid4
 
-from app.application.schemas.task import (
+from backend.app.application.schemas.task import (
     TaskCreate,
     TaskUpdate,
 )
-from app.domain.entities.task import Task
-from app.domain.repositories.task_repository import (
+from backend.app.domain.entities.task import Task
+from backend.app.domain.repositories.task_repository import (
     TaskRepository,
 )
 
