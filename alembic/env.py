@@ -1,43 +1,55 @@
 from logging.config import fileConfig
-import sys
 import os
+import sys
 
-from sqlalchemy import engine_from_config, pool
 from alembic import context
-from app.infrastructure.database.models import TaskModel
+from sqlalchemy import engine_from_config, pool
+from dotenv import load_dotenv
 
 # =========================================================
-# Make "app" importable
+# LOAD ENV
+# =========================================================
+load_dotenv()
+
+# =========================================================
+# PATH SETUP (make backend importable)
 # =========================================================
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
 
-# Alembic config
+# =========================================================
+# ALEMBIC CONFIG
+# =========================================================
 config = context.config
 
-if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+# logging is optional (DO NOT BREAK MIGRATIONS IF IT FAILS)
+if config.config_file_name:
+    try:
+        fileConfig(config.config_file_name)
+    except Exception:
+        pass
 
 # =========================================================
-# IMPORT YOUR APP
+# IMPORT APP METADATA
 # =========================================================
+from backend.app.infrastructure.database.database import Base
+import backend.app.infrastructure.database.models  # noqa: F401
 
-from app.core.settings import settings
-from app.infrastructure.database.database import Base
+# =========================================================
+# DATABASE URL FROM .env
+# =========================================================
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# IMPORTANT: ensures TaskModel is registered in Base.metadata
-import app.infrastructure.database.models
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL not found in .env")
 
-# Set DB URL
-config.set_main_option("sqlalchemy.url", settings.database_url)
+config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 target_metadata = Base.metadata
 
-
 # =========================================================
-# MIGRATION LOGIC
+# MIGRATION FUNCTIONS
 # =========================================================
-
 
 def run_migrations_offline():
     url = config.get_main_option("sqlalchemy.url")
