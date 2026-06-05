@@ -32,8 +32,13 @@ if config.config_file_name:
 # =========================================================
 # IMPORT APP METADATA
 # =========================================================
+# =========================================================
+# IMPORT APP METADATA
+# =========================================================
 from backend.app.infrastructure.database.database import Base
+
 import backend.app.infrastructure.database.models  # noqa: F401
+import backend.app.infrastructure.database.user_model  # noqa: F401
 
 # =========================================================
 # DATABASE URL FROM .env

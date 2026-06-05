@@ -6,24 +6,32 @@ from backend.app.application.schemas.task import (
     TaskResponse,
     TaskUpdate,
 )
+
 from backend.app.application.services.task_service import TaskService
 from backend.app.infrastructure.database.database import get_db
 from backend.app.infrastructure.repositories.sqlalchemy_task_repository import (
     SQLAlchemyTaskRepository,
 )
 
+from backend.app.core.dependencies import (
+    get_current_user,
+    require_role,
+)
+
+from backend.app.infrastructure.database.user_model import User
+
 router = APIRouter()
 
 
-@router.post(
-    "/",
-    response_model=TaskResponse,
-    status_code=201,
-)
+# =========================
+# CREATE TASK (AUTH REQUIRED)
+# =========================
+@router.post("/", response_model=TaskResponse, status_code=201)
 def create_task(
     payload: TaskCreate,
     db: Session = Depends(get_db),
-) -> TaskResponse:
+    current_user: User = Depends(get_current_user),
+):
     repository = SQLAlchemyTaskRepository(db)
     service = TaskService(repository)
 
@@ -38,10 +46,14 @@ def create_task(
     )
 
 
+# =========================
+# LIST TASKS (AUTH REQUIRED)
+# =========================
 @router.get("/", response_model=list[TaskResponse])
 def list_tasks(
     db: Session = Depends(get_db),
-) -> list[TaskResponse]:
+    current_user: User = Depends(get_current_user),
+):
     repository = SQLAlchemyTaskRepository(db)
     service = TaskService(repository)
 
@@ -59,11 +71,15 @@ def list_tasks(
     ]
 
 
+# =========================
+# GET TASK (AUTH REQUIRED)
+# =========================
 @router.get("/{task_id}", response_model=TaskResponse)
 def get_task(
     task_id: str,
     db: Session = Depends(get_db),
-) -> TaskResponse:
+    current_user: User = Depends(get_current_user),
+):
     repository = SQLAlchemyTaskRepository(db)
     service = TaskService(repository)
 
@@ -81,12 +97,16 @@ def get_task(
     )
 
 
+# =========================
+# UPDATE TASK (AUTH REQUIRED)
+# =========================
 @router.put("/{task_id}", response_model=TaskResponse)
 def update_task(
     task_id: str,
     payload: TaskUpdate,
     db: Session = Depends(get_db),
-) -> TaskResponse:
+    current_user: User = Depends(get_current_user),
+):
     repository = SQLAlchemyTaskRepository(db)
     service = TaskService(repository)
 
@@ -104,11 +124,15 @@ def update_task(
     )
 
 
+# =========================
+# DELETE TASK (ADMIN ONLY)
+# =========================
 @router.delete("/{task_id}")
 def delete_task(
     task_id: str,
     db: Session = Depends(get_db),
-) -> dict[str, str]:
+    current_user: User = Depends(require_role("admin")),
+):
     repository = SQLAlchemyTaskRepository(db)
     service = TaskService(repository)
 
