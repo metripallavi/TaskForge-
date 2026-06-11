@@ -1,5 +1,4 @@
 import os
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -7,7 +6,7 @@ class AppSettings(BaseSettings):
     app_name: str = "TaskForge"
     version: str = "0.1.0"
 
-    database_url: str = os.getenv("DATABASE_URL")
+    database_url: str
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -15,4 +14,6 @@ class AppSettings(BaseSettings):
     )
 
 
-settings = AppSettings()
+settings = AppSettings(
+    database_url=os.getenv("DATABASE_URL", "")
+)

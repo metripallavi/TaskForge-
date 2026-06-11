@@ -50,3 +50,4 @@ def authenticate_user(
         return None
 
     return user
+git commit -m "Phase 08: Apply linting, formatting, and CI stabilization (Ruff + Black + MyPy)"
