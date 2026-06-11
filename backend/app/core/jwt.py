@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+
 from jose import jwt
 
 SECRET_KEY = "supersecretkey"  # we’ll move to .env later

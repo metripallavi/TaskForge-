@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
 
-from backend.app.infrastructure.database.user_model import User
 from backend.app.core.security import (
     hash_password,
     verify_password,
 )
+from backend.app.infrastructure.database.user_model import User
 
 
 def create_user(
@@ -38,11 +38,7 @@ def authenticate_user(
     Returns the user if valid, otherwise None.
     """
 
-    user = (
-        db.query(User)
-        .filter(User.email == email)
-        .first()
-    )
+    user = db.query(User).filter(User.email == email).first()
 
     if not user:
         return None

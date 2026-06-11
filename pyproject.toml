@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 88
-target-version = ["py312"]
+target-version = ["py310"]
 
 # =========================
 # Ruff
@@ -10,17 +10,11 @@ line-length = 88
 exclude = ["alembic", "__pycache__", ".venv"]
 
 [tool.ruff.lint]
-select = [
-    "E",
-    "F",
-    "I",
-    "N",
-    "UP",
-    "B",
-]
+select = ["E", "F", "I", "N", "UP", "B"]
 
 ignore = [
     "B008",
+    "B904"
 ]
 
 # =========================
@@ -33,11 +27,12 @@ addopts = "-ra"
 pythonpath = ["."]
 
 # =========================
-# MyPy (optional - relaxed for now)
+# MyPy (relaxed)
 # =========================
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
+ignore_missing_imports = true
 exclude = "alembic/"

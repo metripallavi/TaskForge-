@@ -36,11 +36,7 @@ def update_user_role(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
-    user = (
-        db.query(User)
-        .filter(User.id == user_id)
-        .first()
-    )
+    user = db.query(User).filter(User.id == user_id).first()
 
     if user is None:
         raise HTTPException(

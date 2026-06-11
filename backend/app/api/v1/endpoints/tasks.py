@@ -6,19 +6,16 @@ from backend.app.application.schemas.task import (
     TaskResponse,
     TaskUpdate,
 )
-
 from backend.app.application.services.task_service import TaskService
-from backend.app.infrastructure.database.database import get_db
-from backend.app.infrastructure.repositories.sqlalchemy_task_repository import (
-    SQLAlchemyTaskRepository,
-)
-
 from backend.app.core.dependencies import (
     get_current_user,
     require_role,
 )
-
+from backend.app.infrastructure.database.database import get_db
 from backend.app.infrastructure.database.user_model import User
+from backend.app.infrastructure.repositories.sqlalchemy_task_repository import (
+    SQLAlchemyTaskRepository,
+)
 
 router = APIRouter()
 
