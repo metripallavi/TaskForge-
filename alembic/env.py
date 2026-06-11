@@ -1,4 +1,3 @@
-from logging.config import fileConfig
 import os
 import sys
 
@@ -6,55 +5,32 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from dotenv import load_dotenv
 
-# =========================================================
-# LOAD ENV
-# =========================================================
+# Load env
 load_dotenv()
 
-# =========================================================
-# PATH SETUP (make backend importable)
-# =========================================================
+# Make backend importable
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
 
-# =========================================================
-# ALEMBIC CONFIG
-# =========================================================
 config = context.config
 
-# logging is optional (DO NOT BREAK MIGRATIONS IF IT FAILS)
-if config.config_file_name:
-    try:
-        fileConfig(config.config_file_name)
-    except Exception:
-        pass
+# ❌ IMPORTANT: disable logging config (FIXES YOUR ERROR)
+# fileConfig(config.config_file_name)
 
-# =========================================================
-# IMPORT APP METADATA
-# =========================================================
-# =========================================================
-# IMPORT APP METADATA
-# =========================================================
 from backend.app.infrastructure.database.database import Base
 
-import backend.app.infrastructure.database.models  # noqa: F401
-import backend.app.infrastructure.database.user_model  # noqa: F401
+import backend.app.infrastructure.database.models  # noqa
+import backend.app.infrastructure.database.user_model  # noqa
 
-# =========================================================
-# DATABASE URL FROM .env
-# =========================================================
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
-    raise ValueError("DATABASE_URL not found in .env")
+    raise RuntimeError("DATABASE_URL is not set")
 
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 target_metadata = Base.metadata
 
-# =========================================================
-# MIGRATION FUNCTIONS
-# =========================================================
 
 def run_migrations_offline():
     url = config.get_main_option("sqlalchemy.url")
@@ -73,7 +49,7 @@ def run_migrations_offline():
 
 def run_migrations_online():
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
