@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-test:
+  test-lint-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,10 +24,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Check Python import sanity
+      # 🧼 Lint check
+      - name: Run Ruff (lint)
         run: |
-          python -c "import backend"
+          ruff check .
 
+      # 🎨 Format check
+      - name: Run Black (format check)
+        run: |
+          black --check .
+
+      # 🧪 Run tests
+      - name: Run Pytest
+        run: |
+          pytest -q --disable-warnings --maxfail=1
+
+      # 🐳 Docker build test
       - name: Build Docker image
         run: |
           docker build -t taskforge-api .

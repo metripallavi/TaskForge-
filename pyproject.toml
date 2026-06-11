@@ -1,13 +1,13 @@
 [tool.black]
 line-length = 88
-target-version = ["py311"]
+target-version = ["py312"]
 
 # =========================
 # Ruff
 # =========================
 [tool.ruff]
 line-length = 88
-exclude = ["alembic"]
+exclude = ["alembic", "__pycache__", ".venv"]
 
 [tool.ruff.lint]
 select = [
@@ -24,22 +24,6 @@ ignore = [
 ]
 
 # =========================
-# MyPy
-# =========================
-[tool.mypy]
-python_version = "3.11"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-exclude = "alembic/"
-
-[[tool.mypy.overrides]]
-module = [
-    "app.infrastructure.repositories.sqlalchemy_task_repository",
-]
-ignore_errors = true
-
-# =========================
 # Pytest
 # =========================
 [tool.pytest.ini_options]
@@ -47,3 +31,13 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = "-ra"
 pythonpath = ["."]
+
+# =========================
+# MyPy (optional - relaxed for now)
+# =========================
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+exclude = "alembic/"
