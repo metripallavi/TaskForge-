@@ -1,34 +1,18 @@
-from fastapi import FastAPI
+from fastapi.testclient import TestClient
 
-from backend.app.api.router import api_router
-from backend.app.core.settings import settings
-from backend.app.infrastructure.database.database import Base, engine
+from backend.app.main import app
 
-Base.metadata.create_all(bind=engine)
-
-app = FastAPI(
-    title=settings.app_name,
-    version=settings.version,
-    description="""
-    TaskForge is a task management backend built with FastAPI,
-    PostgreSQL, JWT Authentication, RBAC, Docker, and Clean Architecture.
-    """,
-)
+client = TestClient(app)
 
 
-@app.get(
-    "/",
-    tags=["Root"],
-    summary="API Root",
-    description="Returns basic information about the TaskForge API.",
-)
-def root() -> dict[str, str]:
-    return {
-        "project": settings.app_name,
-        "version": settings.version,
-        "docs": "/docs",
-        "health": "/api/v1/health",
-    }
+def test_root_endpoint() -> None:
+    response = client.get("/")
 
+    assert response.status_code == 200
 
-app.include_router(api_router)
+    data = response.json()
+
+    assert data["project"] == "TaskForge"
+    assert data["docs"] == "/docs"
+    assert data["health"] == "/api/v1/health"
+    assert "version" in data
