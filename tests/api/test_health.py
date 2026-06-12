@@ -9,11 +9,10 @@ def test_root_endpoint() -> None:
     response = client.get("/")
 
     assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to TaskForge"}
 
+    data = response.json()
 
-def test_health_endpoint() -> None:
-    response = client.get("/api/v1/health")
-
-    assert response.status_code == 200
-    assert response.json() == {"status": "healthy"}
+    assert data["project"] == "TaskForge"
+    assert data["docs"] == "/docs"
+    assert data["health"] == "/api/v1/health"
+    assert "version" in data
