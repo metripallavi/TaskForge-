@@ -20,10 +20,13 @@ from backend.app.infrastructure.repositories.sqlalchemy_task_repository import (
 router = APIRouter()
 
 
-# =========================
-# CREATE TASK (AUTH REQUIRED)
-# =========================
-@router.post("/", response_model=TaskResponse, status_code=201)
+@router.post(
+    "/",
+    response_model=TaskResponse,
+    status_code=201,
+    summary="Create Task",
+    description="Create a new task for the authenticated user.",
+)
 def create_task(
     payload: TaskCreate,
     db: Session = Depends(get_db),
@@ -43,10 +46,12 @@ def create_task(
     )
 
 
-# =========================
-# LIST TASKS (AUTH REQUIRED)
-# =========================
-@router.get("/", response_model=list[TaskResponse])
+@router.get(
+    "/",
+    response_model=list[TaskResponse],
+    summary="List Tasks",
+    description="Retrieve all tasks.",
+)
 def list_tasks(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -68,10 +73,12 @@ def list_tasks(
     ]
 
 
-# =========================
-# GET TASK (AUTH REQUIRED)
-# =========================
-@router.get("/{task_id}", response_model=TaskResponse)
+@router.get(
+    "/{task_id}",
+    response_model=TaskResponse,
+    summary="Get Task",
+    description="Retrieve a task by its ID.",
+)
 def get_task(
     task_id: str,
     db: Session = Depends(get_db),
@@ -94,10 +101,12 @@ def get_task(
     )
 
 
-# =========================
-# UPDATE TASK (AUTH REQUIRED)
-# =========================
-@router.put("/{task_id}", response_model=TaskResponse)
+@router.put(
+    "/{task_id}",
+    response_model=TaskResponse,
+    summary="Update Task",
+    description="Update an existing task.",
+)
 def update_task(
     task_id: str,
     payload: TaskUpdate,
@@ -121,10 +130,11 @@ def update_task(
     )
 
 
-# =========================
-# DELETE TASK (ADMIN ONLY)
-# =========================
-@router.delete("/{task_id}")
+@router.delete(
+    "/{task_id}",
+    summary="Delete Task",
+    description="Delete a task. Admin role required.",
+)
 def delete_task(
     task_id: str,
     db: Session = Depends(get_db),
