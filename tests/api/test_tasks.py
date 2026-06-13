@@ -94,3 +94,60 @@ def test_get_task() -> None:
 
     assert response.status_code == 200
     assert response.json()["id"] == task_id
+
+
+def test_update_task() -> None:
+    headers = get_auth_headers()
+
+    created = client.post(
+        "/api/v1/tasks",
+        json={
+            "title": "Old Title",
+            "description": "Old Description",
+        },
+        headers=headers,
+    )
+
+    assert created.status_code == 201
+
+    task_id = created.json()["id"]
+
+    response = client.put(
+        f"/api/v1/tasks/{task_id}",
+        json={
+            "title": "New Title",
+            "completed": True,
+        },
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["title"] == "New Title"
+    assert data["completed"] is True
+
+
+def test_delete_task_requires_admin() -> None:
+    headers = get_auth_headers()
+
+    created = client.post(
+        "/api/v1/tasks",
+        json={
+            "title": "Delete Me",
+            "description": "Task",
+        },
+        headers=headers,
+    )
+
+    assert created.status_code == 201
+
+    task_id = created.json()["id"]
+
+    response = client.delete(
+        f"/api/v1/tasks/{task_id}",
+        headers=headers,
+    )
+
+    assert response.status_code == 403
